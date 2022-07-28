@@ -20,6 +20,7 @@ This project contains the following documents:
 * [x] sql_queries.py - Contains all the SQL queries for the ETL process
 * [x] etl.py - Runs the ETL process for both song and log datasets **Run this next.**
 * [x] test.ipynb - Contains the sanity checks to be run after etl.py
+* [x] Data - folder containing all the data for ETL process. **use the data as it is to run etl.py**
 * [x] Reference only: etl_process.ipynb - jupyter notebook to understand the entire ETL process step-by-step - *This can be executed independently to get the same results as etl.py.* **This does not require create_tables.py to be run before**
 
 ### Caveat
