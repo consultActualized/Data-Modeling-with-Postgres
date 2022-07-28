@@ -7,6 +7,14 @@ from datetime import datetime
 
 
 def getTimeDet(timestamp):
+    """
+    This function is used for:
+    breaking down timestamp into its base components like year, month, week, day, hour, day of week and returns an array containing all thes individual elements
+
+    Inputs: raw timestamp
+    Return: array of timestamp components
+    """
+
     stamp = datetime.fromtimestamp(timestamp / 1000)
     return [
         timestamp,
@@ -20,6 +28,19 @@ def getTimeDet(timestamp):
 
 
 def process_song_file(cur, filepath):
+    """
+    This function is used for processing the song file:
+    - Read song data JSON file as a dataframe
+    - pick relevant columns related to song and artist information
+    - insert this data into songs table and artists table via two calls to cur.execute statement
+
+    Inputs:
+    - cursor to database to perform cur.execute
+    - filepath - json filepath of song file
+
+    Return: nothing
+    """
+
     # open song file
     df = pd.read_json(filepath, lines=True)
 
@@ -38,6 +59,26 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
+    """
+    This function is used for processing the log file:
+    - Read log data JSON file as a dataframe
+    - Filter dataframe by nextsong action
+    Process Time Data:
+    - retrieve individual time components from getTimeDet function by passing timestamp as input
+    - collate all this time information and insert into time table via cur.execute
+    Process User Data:
+    - pick user information from this data frame
+    - insert user data into users table via cur.execute
+    Process Songplays Data:
+    - using the song_select query, find the song_id, artist_id for every song title, artist and duration
+    - collate all songplays related information from the log data and insert into songplays table via cur.execute
+
+    Inputs:
+    - cursor -  cursor to database to perform cur.execute
+    - filepath - json filepath of log file
+
+    Return: nothing
+    """
     # open log file
     df = pd.read_json(filepath, lines=True)
     dropCols = "auth itemInSession method registration status".split()
@@ -91,6 +132,18 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
+
+    """
+    This function is used to:
+    - retrieve all JSON files from the soource directory
+    - iterate over these files and pass them into the process_song_file and process_log_file to update the database with relevant information from the source data
+
+    Inputs:
+    - cursor - cursor to database to perform cur.execute
+    - connection - database connection
+    - filepath - source data filepath
+    - func - function for process song or process log
+    """
     # get all files matching extension from directory
     all_files = []
     for root, dirs, files in os.walk(filepath):
@@ -110,6 +163,15 @@ def process_data(cur, conn, filepath, func):
 
 
 def main():
+    """
+    main function:
+    This is used to:"
+    - Establish connect to databae
+    - Create cursor for database
+    - Call process song and process log functions
+    - Close database connection
+    """
+
     conn = psycopg2.connect(
         "host=127.0.0.1 dbname=sparkifydb user=student password=student"
     )
