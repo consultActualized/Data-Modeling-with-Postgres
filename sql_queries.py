@@ -22,7 +22,11 @@ songplay_table_create = """
                         artist_id VARCHAR, 
                         session_id VARCHAR, 
                         location VARCHAR, 
-                        useragent VARCHAR 
+                        useragent VARCHAR ,
+                        FOREIGN KEY (user_id) REFERENCES users(user_id),
+                        FOREIGN KEY (song_id) REFERENCES songs(song_id),
+                        FOREIGN KEY (artist_id) REFERENCES artists(artist_id),
+                        FOREIGN KEY (start_time) REFERENCES time(timestamp)
                         );
                     """
 
@@ -32,7 +36,7 @@ user_table_create = """
                         firstname VARCHAR, 
                         lastname VARCHAR, 
                         gender VARCHAR, 
-                        level VARCHAR 
+                        level VARCHAR
                         );
                     """
 
@@ -40,9 +44,9 @@ song_table_create = """
                         CREATE TABLE IF NOT EXISTS songs (
                         song_id VARCHAR PRIMARY KEY, 
                         title VARCHAR, 
-                        artist_id VARCHAR NOT NULL, 
+                        artist_id VARCHAR NOT NULL UNIQUE, 
                         year int, 
-                        duration float 
+                        duration float
                         );
                     """
 
@@ -52,7 +56,9 @@ artist_table_create = """
                         name VARCHAR, 
                         location VARCHAR, 
                         latitude float, 
-                        longitude float 
+                        longitude float,
+                        CONSTRAINT fk_song
+                            FOREIGN KEY (artist_id) REFERENCES songs(artist_id)
                         );
                     """
 
@@ -64,7 +70,7 @@ time_table_create = """
                         week VARCHAR, 
                         month int, 
                         year int, 
-                        weekday VARCHAR 
+                        weekday VARCHAR
                         );
                     """
 
@@ -74,7 +80,7 @@ songplay_table_insert = """INSERT INTO songplays (start_time, user_id, level, so
 
 user_table_insert = """INSERT INTO users (user_id, firstname, lastname, gender, level) VALUES (%s,%s,%s,%s,%s) ON CONFLICT (user_id) DO NOTHING;"""
 
-song_table_insert = """INSERT INTO songs (song_id, title, artist_id, year, duration) VALUES (%s,%s,%s,%s,%s) ON CONFLICT (song_id) DO NOTHING;"""
+song_table_insert = """INSERT INTO songs (song_id, title, artist_id, year, duration) VALUES (%s,%s,%s,%s,%s) ON CONFLICT (artist_id) DO NOTHING;"""
 
 artist_table_insert = """INSERT INTO artists (artist_id, name, location, latitude, longitude) VALUES (%s,%s,%s,%s,%s) ON CONFLICT (artist_id) DO NOTHING;"""
 
@@ -90,11 +96,11 @@ song_select = """SELECT s.song_id, s.artist_id FROM songs s
 # QUERY LISTS
 
 create_table_queries = [
-    songplay_table_create,
-    user_table_create,
     song_table_create,
     artist_table_create,
     time_table_create,
+    user_table_create,
+    songplay_table_create,
 ]
 drop_table_queries = [
     songplay_table_drop,
