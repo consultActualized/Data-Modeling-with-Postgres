@@ -23,7 +23,7 @@ This project contains the following documents:
 * [x] Data - folder containing all the data for ETL process. **use the data as it is to run etl.py**
 * [x] Reference only: etl_process.ipynb - jupyter notebook to understand the entire ETL process step-by-step - *This can be executed independently to get the same results as etl.py.* **This does not require create_tables.py to be run before**
 
-### Caveat
+### CaveatW
 > The create_tables.py file uses the primary database as studentdb. Please review this file and ensure your database has suitable login credentials before running this file. 
 
 ### Query Check 
@@ -33,6 +33,10 @@ This project contains the following documents:
 SELECT * FROM songplays WHERE song_id IS NOT NULL; 
 ```
 
+### Database Schema
+The ERD shown below highlights the various dimension tables and their relationship to the songplay fact table:
+
+>![alt](sparkifyDB_ERD.png)
 
 
 
